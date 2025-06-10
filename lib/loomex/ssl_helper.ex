@@ -57,14 +57,14 @@ defmodule Loomex.SSLHelper do
     }
 
     encoded_cert = :public_key.der_encode :Certificate, cert
-    cert_pem = :public_key.pem_encode [{:Certificate, encoded_cert, :not_encrypted}]
-    File.write "./cert.der", encoded_cert
-    File.write "./cert.pem", cert_pem
+    # cert_pem = :public_key.pem_encode [{:Certificate, encoded_cert, :not_encrypted}]
+    # File.write "./cert.der", encoded_cert
+    # File.write "./cert.pem", cert_pem
     
     encoded_key = :public_key.pkix_encode :PrivateKeyInfo, priv, :plain
-    key_pem = :public_key.pem_encode [{:PrivateKeyInfo, encoded_key, :not_encrypted}]
-    File.write "./key.der", encoded_key
-    File.write "./key.pem", key_pem
+    # key_pem = :public_key.pem_encode [{:PrivateKeyInfo, encoded_key, :not_encrypted}]
+    # File.write "./key.der", encoded_key
+    # File.write "./key.pem", key_pem
     
     %{ cert: encoded_cert, key: {:PrivateKeyInfo, encoded_key}}
   end

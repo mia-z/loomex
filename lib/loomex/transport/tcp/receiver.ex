@@ -49,7 +49,7 @@ defmodule Loomex.Transport.Tcp.Receiver do
             {:noreply, %__MODULE__{state | current_buf: data, request_metadata: {:incomplete, data}}}
           {:complete, request_data} ->
             Logger.debug "Got full request data, no body", subfunc: "handle_recv:request_state:complete", socket: client_socket, socket_ref: client_ref
-            {:noreply, %__MODULE__{state | current_buf: data, request_metadata: {:complete, request_data}, request_body: {:complete, <<>>}}, {:continue, :request_metadata_ready}}
+            {:noreply, %__MODULE__{state | current_buf: data, request_metadata: {:complete, request_data}, request_body: {:partial, <<>>}}, {:continue, :request_metadata_ready}}
           {:complete, request_data, partial_or_full_body} ->
             Logger.debug "Got full request data, some or all body", subfunc: "handle_recv:request_state:complete", socket: client_socket, socket_ref: client_ref            
             {:noreply, %__MODULE__{state | current_buf: data, request_metadata: {:complete, request_data}, request_body: {:partial, partial_or_full_body}}, {:continue, :request_metadata_ready}}

@@ -2,9 +2,9 @@ defmodule Loomex.Transport do
   @type t() :: module()
   
   @type receive_state() ::
-    {:incomplete, <<>> | binary() | nil},
-    {:partial, <<>> | binary() | nil},
-    {:complete, <<>> | binary() | nil}
+    {:incomplete, <<>> | binary() | nil} 
+    | {:partial, <<>> | binary() | nil}
+    | {:complete, <<>> | binary() | nil}
     
   @type request_metadata() :: receive_state()
   

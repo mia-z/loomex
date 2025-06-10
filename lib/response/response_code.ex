@@ -61,7 +61,7 @@ defmodule Response.ResponseCode do
   defp format_reason_phrase(phrase), do:
     Atom.to_string(phrase)
     |> String.split("_")
-    |> Enum.map(&(String.capitalize(&1)))
+    |> Enum.map(&String.capitalize(&1))
     |> Enum.join(" ")
     
   @spec format({status_code(), status()}) :: [String.t()]

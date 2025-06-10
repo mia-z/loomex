@@ -13,13 +13,12 @@ defmodule EndpointTest do
   end
   
   test "Endpoint returns 200 OK" do
-    res = :httpc.request(:get, {~c"http://localhost:4044/", []}, [], [{:body_format, :binary}])
-    assert false
+    res = Req.get!("http://localhost:4044/")
+    assert res.status == 200
   end
   
   test "Endpoint with path returns 200 OK" do
-    res = :httpc.request(:get, {~c"http://localhost:4044/", []}, [], [{:body_format, :binary}])
-    assert false
+    res = Req.get!("http://localhost:4044/hello")
+    assert res.status == 200
   end
-  
 end

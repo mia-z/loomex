@@ -1,15 +1,21 @@
-defmodule Request.RequestRoute do
-  alias Request.RequestRoute, as: RequestRoute
-  defstruct full_path: nil, parts: %{}
+defmodule Request.RequestPath do
   
-  def new(path) do
-    map = %RequestRoute{ full_path: path, parts: %{} }
-    
-    split_path = String.split path, "/", trim: true
-    parts = Enum.reduce split_path, %{}, fn part, acc_parts -> 
-      acc_parts = Map.put acc_parts, Enum.count(acc_parts) + 1, part
-      acc_parts
-    end
-    %RequestRoute{ map | parts: parts}
+  @type t() :: %__MODULE__{
+    full_path: binary(),
+    parts: %{
+      integer() => binary()
+    }
+  }
+  defstruct [
+    full_path: nil, 
+    parts: %{}
+  ]
+  
+  @spec parse(binary()) :: t()
+  def parse(path) do
+    indexed_parts = String.split(path, "/", trim: true)
+    |> Enum.with_index(1)
+    |> Enum.reduce(Map.new(), fn {part, index}, acc -> Map.put(acc, index, part) end)
+    %__MODULE__{ full_path: path, parts: indexed_parts}
   end
 end

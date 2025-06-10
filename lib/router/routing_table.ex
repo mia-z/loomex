@@ -7,12 +7,9 @@ defmodule Router.RoutingTable do
     GenServer.start_link __MODULE__, "", [name: :routing_table]
   end
   
-  @type request() :: %Request{}
-  @type response() :: %Response{}
-  @type match_route() :: %MatchRoute{}
-  @type query_map() :: %{}
-  @type handler_func() :: (request(), query_map() -> response())
-  @type route_definition() :: {match_route(), atom(), handler_func()}
+  @type match_route() :: MatchRoute.t()
+  @type handler_func() :: (Request.t() -> Response.t())
+  @type route_definition() :: {MatchRoute.t(), atom(), handler_func()}
   
   @impl true
   def init(_opts) do
@@ -23,6 +20,7 @@ defmodule Router.RoutingTable do
         for {path, method, func} <- routes do
           match_route = MatchRoute.new path
           hash = to_route_hash path, method
+          Logger.info "Created route hash for #{inspect method} - #{inspect path}\n#{inspect hash}"
           IO.inspect func
           :ets.insert :routes, {hash, match_route, method, func}
         end
@@ -124,7 +122,10 @@ defmodule Router.RoutingTable do
   end
   
   defp to_route_hash(path, method) do
-    :erlang.term_to_binary(method) <> :erlang.term_to_binary(path)
+    path_w_slash = if String.starts_with?(path, "/"),
+      do: path,
+      else: "/" <> path
+    :erlang.term_to_binary(method) <> :erlang.term_to_binary(path_w_slash)
       |> Base.encode64
   end
 end

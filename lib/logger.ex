@@ -13,27 +13,27 @@ defmodule Loomex.Logger do
   end
   
   defp print_info(_level, message, _timestamp, _metadata) do
-    ["[INFO]", ~c"\n", message, ~c"\n"]
+    ["[INFO]", "\n", message, "\n"]
   end
   
   defp print_debug(_level, message, _timestamp, metadata) do
     clean_mod_name = String.replace to_string(Keyword.get(metadata, :module)), "Elixir.", <<>>
     clean_fun_name = case Keyword.get(metadata, :function, :none) do
-      :none -> ~c"?"
+      :none -> "?"
       function_data when is_list(function_data) -> List.first(Keyword.get(metadata, :function), "?")
-      _ -> ~c"?"
+      _ -> "?"
     end
     
-    base = ["----------", ~c"\n"]
-    base = [message, ~c"\n" | base]
+    base = ["----------", "\n"]
+    base = [message, "\n" | base]
   
     base = if Keyword.has_key?(metadata, :reason),
-      do: ["[", ~c"Reason", "]", inspect(Keyword.get(metadata, :reason)), "\n" | base],
+      do: ["[Reason]", inspect(Keyword.get(metadata, :reason)), "\n" | base],
       else: base
 
     
     base = if Keyword.has_key?(metadata, :socket_ref), 
-      do: ["[", "Socket Ref: ", inspect(Keyword.get(metadata, :socket_ref)), "]", "\n" | base],
+      do: ["[Socket Ref: ", inspect(Keyword.get(metadata, :socket_ref)), "]", "\n" | base],
       else: base
 
     base = if Keyword.has_key?(metadata, :socket), 
@@ -41,13 +41,13 @@ defmodule Loomex.Logger do
       else: base
       
     base = if Keyword.has_key?(metadata, :subfunc),
-      do: ["[", to_charlist(clean_mod_name), ":", to_charlist(clean_fun_name), ":", to_charlist(Keyword.get(metadata, :subfunc)), "]", "\n" | base],
-      else: ["[", to_charlist(clean_mod_name), ":", to_charlist(clean_fun_name), "]", "\n" | base]
+      do: ["[", clean_mod_name, ":", clean_fun_name, ":", Keyword.get(metadata, :subfunc), "]", "\n" | base],
+      else: ["[", clean_mod_name, ":", clean_fun_name, "]", "\n" | base]
 
     ["[DEBUG]", "\n" | base]
   end
   
   defp print_default(level, message, _timestamp, _metadata) do
-    ["[", String.upcase(Atom.to_string(level)), "]", ~c"\n", message, ~c"\n"]
+    ["[", String.upcase(Atom.to_string(level)), "]", "\n", message, "\n"]
   end
 end

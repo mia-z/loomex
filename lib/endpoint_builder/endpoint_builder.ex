@@ -30,21 +30,63 @@ defmodule EndpointBuilder do
 
     quote do
       defmodule unquote(handler_module_name) do
-        @type request() :: %Request{}
-        @type response() :: %Response{}
-        @type query_params() :: %{String.t() => String.t()}
-
-        defp get_req(req), do: req
-        defp get_query(query), do: query
-        @spec __handler__(req :: request(), query :: query_params()) :: response()
-        def __handler__(var!(req), var!(query)) do
+        @spec __handler__(req :: Request.t()) :: Response.t()
+        def __handler__(req) do
           import EndpointBuilder.Actions
-          req = get_req(var!(req))
-          query = get_query(var!(query))
+          var!(req, nil) = req
+          _ = var!(req)
+
+          var!(query, nil) = req.query_params
+          _ = var!(query)
+
+          var!(route, nil) = req.route_params
+          _ = var!(route)
+
+          var!(form, nil) = req.body.data
+          _ = var!(form)
+          
+          var!(body, nil) = req.body.data
+          _ = var!(body)
+          
+          var!(json, nil) = req.body.data
+          _ = var!(json)
+          
           unquote(block)
         end
       end
-      @endpoints_coll [{unquote(path), unquote(method), &unquote(handler_module_name).__handler__/2} | @endpoints_coll]
+      @endpoints_coll [{unquote(path), unquote(method), &unquote(handler_module_name).__handler__/1} | @endpoints_coll]
     end
   end
+  
+  defmacro get(path, do: block) do
+    quote do
+      endpoint(:GET, unquote(path), do: unquote(block))
+    end
+  end
+  
+  defmacro post(path, do: block) do
+    quote do
+      endpoint(:POST, unquote(path), do: unquote(block))
+    end
+  end
+  
+  defmacro put(path, do: block) do
+    quote do
+      endpoint(:PUT, unquote(path), do: unquote(block))
+    end
+  end
+  
+  defmacro patch(path, do: block) do
+    quote do
+      endpoint(:PATCH, unquote(path), do: unquote(block))
+    end
+  end
+  
+  defmacro delete(path, do: block) do
+    quote do
+      endpoint(:DELETE, unquote(path), do: unquote(block))
+    end
+  end
+  
+  
 end

@@ -1,6 +1,15 @@
 defmodule Router.MatchRoute do
+  require Logger
   alias Router.MatchRoute, as: MatchRoute
-  defstruct full_path: nil, parts: %{}
+  
+  @type t() :: %__MODULE__{
+    full_path: binary(),
+    parts: map()
+  }
+  defstruct [
+    full_path: nil, 
+    parts: %{}
+  ]
 
   def new(path) do
     map = %MatchRoute{ full_path: path, parts: [] }    
@@ -12,6 +21,13 @@ defmodule Router.MatchRoute do
     |> Enum.sort_by(&(&1.position))
 
     %MatchRoute{ map | parts: parts}
+  end
+  
+  def get_parameter_parts(match_route) do
+    Enum.filter(match_route.parts, fn elem -> Map.get(elem, :is_parameter) end)
+    |> Enum.reduce(Map.new(), fn %{is_parameter: _is_param, position: pos, value: str}, acc -> 
+      Map.put(acc, pos, String.to_atom(String.slice(str, 1..-1//1)))
+    end)
   end
 end
 

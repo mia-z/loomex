@@ -33,4 +33,18 @@ defmodule Loomex.Transport.Tcp do
   def close_socket(socket) do
     :socket.close socket  
   end
+  
+  def sync_recv(socket, initial_data, body_length) do
+    case :socket.recv socket do
+      {:ok, data} ->
+        Logger.debug "Got data in blocking receive: #{inspect data}"
+      {:error, {reason, data}} ->
+        Logger.error "Got error with data in blocking receive: #{inspect data}", reason: reason
+      {:error, reason} ->
+        Logger.error "Got error in blocking receive", reason: reason
+    end
+  end
+  
+  defp recv_loop(socket, data) do
+  end
 end

@@ -1,7 +1,7 @@
 import Config
 
-config :loomex,
-  inet_backend: :socket
+config :logger, :console,
+  format: {Loomex.Logger, :log},
+  metadata: [:module, :function, :application, :pid, :subfunc, :socket, :socket_ref, :reason]
 
-config :ssl,
-  inet_backend: :socket
+import_config "#{config_env()}.exs"

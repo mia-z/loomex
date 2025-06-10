@@ -1,4 +1,6 @@
 defmodule Method do
+  @type t() :: :GET | :POST | :PUT | :PATCH | :OPTIONS | :HEAD | :DELETE | :INVALID_METHOD
+  @spec parse(binary()) :: t()
   def parse(method) when is_binary method do
     method = case String.downcase method do
       "get" -> :GET

@@ -1,4 +1,4 @@
 import Config
 
 config :logger, :console,
-  level: :debug
+  level: :error

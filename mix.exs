@@ -21,17 +21,18 @@ defmodule Loomex.MixProject do
 
   # Run "mix help deps" to learn about dependencies.
   defp deps, do: [
-    
+    {:req, "~> 0.5.10", only: [:test]}
   ]
 
   defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(:dev), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
   
   defp extra_apps(env) do
     case env do
       :prod -> [:logger,:public_key,:crypto,:asn1,:ssl]
       :dev -> [:logger,:public_key,:crypto,:asn1,:ssl,:wx,:runtime_tools,:observer]
-      :test -> [:logger,:public_key,:crypto,:asn1,:ssl,:wx,:runtime_tools,:observer, :inets]
+      :test -> [:logger,:public_key,:crypto,:asn1,:ssl,:wx,:runtime_tools,:observer]
     end
   end
 end
