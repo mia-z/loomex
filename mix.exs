@@ -21,6 +21,7 @@ defmodule Loomex.MixProject do
 
   # Run "mix help deps" to learn about dependencies.
   defp deps, do: [
+    {:telemetry, "~> 1.3.0"},
     {:req, "~> 0.5.10", only: [:test]}
   ]
 

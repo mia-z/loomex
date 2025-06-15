@@ -34,7 +34,7 @@ defmodule Loomex.Transport.Tcp do
     :socket.close socket  
   end
   
-  def sync_recv(socket, initial_data, body_length) do
+  def sync_recv(socket, _initial_data, _body_length) do
     case :socket.recv socket do
       {:ok, data} ->
         Logger.debug "Got data in blocking receive: #{inspect data}"
@@ -45,6 +45,6 @@ defmodule Loomex.Transport.Tcp do
     end
   end
   
-  defp recv_loop(socket, data) do
-  end
+  # defp recv_loop(socket, data) do
+  # end
 end

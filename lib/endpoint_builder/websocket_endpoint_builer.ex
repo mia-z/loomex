@@ -1,4 +1,4 @@
-defmodule EndpointBuilder do
+defmodule EndpointBuilder.WebsocketEndpointBuiler do
   alias EndpointBuilder.EndpointResult
   defmacro __using__(_) do
     quote do
@@ -22,8 +22,9 @@ defmodule EndpointBuilder do
 
     If no method is provided, GET will be used
 
-    While the success typing for an endpoint involves returning a `Request` struct,
-    you should use the provided helpers in `EndpointBuilder.Actions`
+    Handlers should return a valid `EndpointBuilder.EndpointResult`
+    
+    Convenience methods for creating valid `EndpointBuilder.EndpointResult`s can be found within the module
     """
   defmacro endpoint(method \\ :GET, path, do: block) do
     normalized_path_part = String.replace(path, ~r/[^A-Za-z0-9_]/, "_")
@@ -43,51 +44,10 @@ defmodule EndpointBuilder do
           var!(route, nil) = req.route_params
           _ = var!(route)
 
-          var!(form, nil) = req.body.data
-          _ = var!(form)
-          
-          var!(body, nil) = req.body.data
-          _ = var!(body)
-          
-          var!(json, nil) = req.body.data
-          _ = var!(json)
-          
           unquote(block)
         end
       end
       @endpoints_coll [{unquote(path), unquote(method), &unquote(handler_module_name).__handler__/1} | @endpoints_coll]
     end
   end
-  
-  defmacro get(path, do: block) do
-    quote do
-      endpoint(:GET, unquote(path), do: unquote(block))
-    end
-  end
-  
-  defmacro post(path, do: block) do
-    quote do
-      endpoint(:POST, unquote(path), do: unquote(block))
-    end
-  end
-  
-  defmacro put(path, do: block) do
-    quote do
-      endpoint(:PUT, unquote(path), do: unquote(block))
-    end
-  end
-  
-  defmacro patch(path, do: block) do
-    quote do
-      endpoint(:PATCH, unquote(path), do: unquote(block))
-    end
-  end
-  
-  defmacro delete(path, do: block) do
-    quote do
-      endpoint(:DELETE, unquote(path), do: unquote(block))
-    end
-  end
-  
-  
 end

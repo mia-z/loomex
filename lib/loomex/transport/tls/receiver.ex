@@ -1,5 +1,5 @@
 defmodule Loomex.Transport.Tls.Receiver do
-  alias Loomex.Pipeline
+  alias Loomex.PipelineTask
   require Logger
   
   use GenServer, restart: :transient
@@ -56,7 +56,7 @@ defmodule Loomex.Transport.Tls.Receiver do
       {:complete, complete_request_no_body} ->
         Logger.debug "Request metadata complete", subfunc: "request_state:complete", socket: client_socket, socket_ref: client_ref
         Logger.info "Complete data\n#{inspect complete_request_no_body}"
-        Pipeline.dispatch [type: :tls, client_socket: client_socket, raw_request_metadata: complete_request_no_body, request_body: {:complete, nil}]
+        PipelineTask.dispatch [type: :tls, client_socket: client_socket, raw_request_metadata: complete_request_no_body, request_body: {:complete, nil}]
         {:noreply, state}
       {:complete, complete_request, body_data} ->
         Logger.debug "Request metadata complete, body partial", subfunc: "request_state:complete", socket: client_socket, socket_ref: client_ref
@@ -64,7 +64,7 @@ defmodule Loomex.Transport.Tls.Receiver do
         Logger.info "Current body buffer\n#{inspect body_data}"
         Logger.info "Current body size: #{inspect String.length(body_data)}"
         Logger.info "Total req size: #{inspect String.length(body_data) + String.length(complete_request)}"
-        Pipeline.dispatch [type: :tls, client_socket: client_socket, raw_request_metadata: complete_request, request_body: {:partial, body_data}]
+        PipelineTask.dispatch [type: :tls, client_socket: client_socket, raw_request_metadata: complete_request, request_body: {:partial, body_data}]
         {:noreply, state}
     end
   end

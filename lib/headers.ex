@@ -23,6 +23,11 @@ defmodule Headers do
     Map.merge(headers1, headers2)
   end
     
+  @spec add(t(), Header.t()) :: t()
+  def add(headers, header_to_add) do
+    Map.put(headers, header_to_add.key, header_to_add)
+  end
+  
   @spec add(t(), binary(), binary()) :: t()
   def add(headers, key, value) do
     Map.put(headers, key, Header.new(key, value))
@@ -54,6 +59,7 @@ defmodule Headers do
     |> Enum.reduce([], fn header, acc -> [Header.format(header) | acc] end)
   end
 
+  @spec default_response_headers() :: t()
   def default_response_headers() do
     %{
       "Date" => Header.date(),
@@ -73,7 +79,7 @@ defmodule Headers do
   defmodule Header do
     @type t() :: %__MODULE__{
       key: binary(),
-      value: binary(),
+      value: binary() | integer(),
       attributes: %{binary() => binary()} | nil,
       malformed: boolean()
     }
@@ -97,7 +103,7 @@ defmodule Headers do
       %__MODULE__{key: header_key, value: header_value, attributes: nil}
     end
 
-    @doc "Creates a new Header.t() struct from a raw {Header: value} string"
+    @doc "Creates a new Header.t() struct from a raw 'Header-Key: header-value' string"
     @spec new(binary()) :: t()
     def new(key_and_value_string) when is_binary(key_and_value_string) do 
       parse(key_and_value_string)

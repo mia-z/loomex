@@ -1,5 +1,5 @@
 defmodule Response.ResponseCode do
-  @type response_code() ::
+  @type t() ::
     {200, :ok}
       | {201, :created}
       | {202, :accepted}
@@ -67,75 +67,75 @@ defmodule Response.ResponseCode do
   @spec format({status_code(), status()}) :: [String.t()]
   def format({c, s}), do: ["#{c}", " ", format_reason_phrase(s)]
   
-  @spec ok() :: response_code()
+  @spec ok() :: t()
   def ok, do: {200, :ok}
 
-  @spec created() :: response_code()
+  @spec created() :: t()
   def created, do: {201, :created}
 
-  @spec accepted() :: response_code()
+  @spec accepted() :: t()
   def accepted, do: {202, :accepted}
 
-  @spec no_content() :: response_code()
+  @spec no_content() :: t()
   def no_content, do: {204, :no_content}
 
-  @spec moved_permanently() :: response_code()
+  @spec moved_permanently() :: t()
   def moved_permanently, do: {301, :moved_permanently}
 
-  @spec found() :: response_code()
+  @spec found() :: t()
   def found, do: {302, :found}
 
-  @spec see_other() :: response_code()
+  @spec see_other() :: t()
   def see_other, do: {303, :see_other}
 
-  @spec not_modified() :: response_code()
+  @spec not_modified() :: t()
   def not_modified, do: {304, :not_modified}
 
-  @spec temporary_redirect() :: response_code()
+  @spec temporary_redirect() :: t()
   def temporary_redirect, do: {307, :temporary_redirect}
 
-  @spec permanent_redirect() :: response_code()
+  @spec permanent_redirect() :: t()
   def permanent_redirect, do: {308, :permanent_redirect}
 
-  @spec bad_request() :: response_code()
+  @spec bad_request() :: t()
   def bad_request, do: {400, :bad_request}
 
-  @spec unauthorized() :: response_code()
+  @spec unauthorized() :: t()
   def unauthorized, do: {401, :unauthorized}
 
-  @spec forbidden() :: response_code()
+  @spec forbidden() :: t()
   def forbidden, do: {403, :forbidden}
 
-  @spec not_found() :: response_code()
+  @spec not_found() :: t()
   def not_found, do: {404, :not_found}
 
-  @spec method_not_allowed() :: response_code()
+  @spec method_not_allowed() :: t()
   def method_not_allowed, do: {405, :method_not_allowed}
 
-  @spec conflict() :: response_code()
+  @spec conflict() :: t()
   def conflict, do: {409, :conflict}
 
-  @spec gone() :: response_code()
+  @spec gone() :: t()
   def gone, do: {410, :gone}
 
-  @spec unprocessable_entity() :: response_code()
+  @spec unprocessable_entity() :: t()
   def unprocessable_entity, do: {422, :unprocessable_entity}
 
-  @spec too_many_requests() :: response_code()
+  @spec too_many_requests() :: t()
   def too_many_requests, do: {429, :too_many_requests}
 
-  @spec internal_server_error() :: response_code()
+  @spec internal_server_error() :: t()
   def internal_server_error, do: {500, :internal_server_error}
 
-  @spec not_implemented() :: response_code()
+  @spec not_implemented() :: t()
   def not_implemented, do: {501, :not_implemented}
 
-  @spec bad_gateway() :: response_code()
+  @spec bad_gateway() :: t()
   def bad_gateway, do: {502, :bad_gateway}
 
-  @spec service_unavailable() :: response_code()
+  @spec service_unavailable() :: t()
   def service_unavailable, do: {503, :service_unavailable}
 
-  @spec gateway_timeout() :: response_code()
+  @spec gateway_timeout() :: t()
   def gateway_timeout, do: {504, :gateway_timeout}
 end

@@ -1,5 +1,5 @@
 defmodule Loomex.Transport.Tcp.Receiver do
-  alias Loomex.Pipeline
+  alias Loomex.PipelineTask
   require Logger
   
   use GenServer, restart: :transient
@@ -69,7 +69,7 @@ defmodule Loomex.Transport.Tcp.Receiver do
     Logger.debug "Request metadata finalized, computing request body", subfunc: "request_metadata_ready", socket: client_socket, client_ref: client_ref
     Logger.info "Final request metadata\n#{inspect elem(request_metadata, 1)}"
     Logger.info "Current request body\n#{inspect elem(request_body, 1)}"
-    Pipeline.dispatch [type: :tcp, client_socket: client_socket, raw_request_metadata: elem(request_metadata, 1), request_body: request_body]
+    PipelineTask.dispatch [type: :tcp, client_socket: client_socket, raw_request_metadata: elem(request_metadata, 1), request_body: request_body]
     {:noreply, state}
   end
   

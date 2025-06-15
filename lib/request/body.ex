@@ -68,7 +68,7 @@ defmodule Request.Body do
     handle_content_type(value, attributes, initial_body_state, headers)
   end
   
-  defp handle_content_type("application/" <> subtype, header_attributes, initial_body_state, headers) do
+  defp handle_content_type("application/" <> subtype, _header_attributes, initial_body_state, _headers) do
     Logger.info "#{inspect subtype}"
     case subtype do
       "x-www-form-urlencoded" ->
@@ -106,7 +106,7 @@ defmodule Request.Body do
     end
   end
   
-  defp handle_content_type("multipart/form-data", header_attributes = %{}, initial_body_state, headers) do
+  defp handle_content_type("multipart/form-data", header_attributes = %{}, initial_body_state, _headers) do
     {_receive_status, current_body} = initial_body_state
     boundary_key = Map.get(header_attributes, "boundary")
 

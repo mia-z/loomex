@@ -22,4 +22,12 @@ defmodule Support.Endpoints do
     Logger.info "#{inspect json["field_one"]}"
     ok()
   end
+  
+  get "/json_result" do
+    json_result(%{value_one: "hello!", name: "Ryan", age: 31})
+  end
+  
+  get "/text_result" do
+    text_result("Just some text")
+  end
 end
